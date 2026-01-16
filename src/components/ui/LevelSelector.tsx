@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { getLevelsForModule } from '../../lib/levels';
 import type { GameModule } from '../../lib/types';
+import { HexagonalLevelCell } from './HexagonalLevelCell';
+import { MissionControlPanel } from './MissionControlPanel';
+import { TacticalBackground } from './TacticalBackground';
 
 const MODULE_TITLES: Record<GameModule, string> = {
     abstract: 'Abstract Puzzles',
@@ -10,11 +13,11 @@ const MODULE_TITLES: Record<GameModule, string> = {
     robotics: 'Robotics Assembly',
 };
 
-const MODULE_ICONS: Record<GameModule, string> = {
-    abstract: '🎯',
-    drone: '🛸',
-    bridge: '🌉',
-    robotics: '🤖',
+const MODULE_SUBTITLES: Record<GameModule, string> = {
+    abstract: 'VECTOR LOGIC ENGAGED',
+    drone: 'VECTOR NAVIGATION ENGAGED',
+    bridge: 'STRUCTURAL ANALYSIS ENGAGED',
+    robotics: 'MECHANICAL SYSTEMS ENGAGED',
 };
 
 export const LevelSelector: React.FC = () => {
@@ -26,120 +29,162 @@ export const LevelSelector: React.FC = () => {
     const levels = getLevelsForModule(activeModule);
     const moduleProgress = careerProgress.moduleProgress[activeModule];
 
-    const handleLevelSelect = (index: number) => {
+    // Following rerender-functional-setstate: Use useCallback for stable references
+    const handleLevelSelect = useCallback((index: number) => {
         if (index > moduleProgress.unlockedIndex) return;
         loadLevel(index);
         setScreen('game');
-    };
+    }, [moduleProgress.unlockedIndex, loadLevel, setScreen]);
 
-    const handleBack = () => {
+    const handleBack = useCallback(() => {
         setScreen('menu');
-    };
+    }, [setScreen]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex flex-col p-8">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-                <button
-                    onClick={handleBack}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-white transition-colors flex items-center gap-2"
-                >
-                    <span>←</span>
-                    Back
-                </button>
+        <div className="relative min-h-screen overflow-hidden">
+            {/* Tactical Background */}
+            <TacticalBackground />
 
-                <div className="text-center">
-                    <div className="text-3xl mb-2">{MODULE_ICONS[activeModule]}</div>
-                    <h1 className="text-2xl font-bold text-white">{MODULE_TITLES[activeModule]}</h1>
-                </div>
+            {/* Corner Coordinates */}
+            <div
+                className="absolute top-4 left-4 text-cyan-400 text-xs opacity-70 z-10"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+                <div>SYS.COORD: 48-73</div>
+            </div>
 
-                <div className="text-right">
-                    <div className="text-2xl text-yellow-400 font-bold">
-                        {moduleProgress.starsEarned} ★
+            <div
+                className="absolute top-4 right-80 text-cyan-400 text-xs opacity-70 z-10"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+                <div>TIME: 14:35:22</div>
+                <div className="text-slate-500">DATE: 2048.11.20</div>
+            </div>
+
+            <div
+                className="absolute bottom-4 left-4 text-slate-600 text-xs opacity-50 z-10"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+                SYSTEM DIAGNOSTICS: NORMAL
+            </div>
+
+            <div
+                className="absolute bottom-4 right-4 text-slate-600 text-xs opacity-50 z-10"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+                NETWORK STATUS: SECURE // LOW LATENCY
+            </div>
+
+            {/* Mission Control Panel */}
+            <MissionControlPanel
+                starsEarned={moduleProgress.starsEarned}
+                levelsCompleted={moduleProgress.levelsCompleted}
+                totalLevels={levels.length}
+            />
+
+            {/* Main Content Container */}
+            <div className="relative z-10 flex flex-col min-h-screen p-8">
+                {/* Header with Back Button */}
+                <div className="flex items-center justify-between mb-8">
+                    <button
+                        onClick={handleBack}
+                        className="px-6 py-3 bg-slate-900/60 backdrop-blur-md hover:bg-slate-800/60 rounded-lg text-cyan-400 border border-cyan-500/50 transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(0,217,255,0.3)]"
+                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                        <span>←</span>
+                        ABORT MISSION
+                    </button>
+
+                    {/* Module Title */}
+                    <div className="text-center">
+                        <h1
+                            className="text-4xl font-bold text-white mb-1 tracking-wider"
+                            style={{
+                                textShadow: '0 0 20px rgba(0, 217, 255, 0.5)',
+                            }}
+                        >
+                            {MODULE_TITLES[activeModule]}
+                        </h1>
+                        <p
+                            className="text-cyan-400 text-sm tracking-widest"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                            {MODULE_SUBTITLES[activeModule]}
+                        </p>
                     </div>
-                    <div className="text-sm text-slate-500">Module Stars</div>
-                </div>
-            </div>
 
-            {/* Progress Bar */}
-            <div className="max-w-4xl mx-auto w-full mb-8">
-                <div className="flex justify-between text-sm text-slate-400 mb-2">
-                    <span>{moduleProgress.levelsCompleted} / {levels.length} levels completed</span>
-                    <span>{Math.round((moduleProgress.levelsCompleted / levels.length) * 100)}%</span>
+                    {/* Star count */}
+                    <div className="text-right">
+                        <div
+                            className="text-3xl text-yellow-400 font-bold"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                            {moduleProgress.starsEarned} ★
+                        </div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wider">
+                            Total Stars
+                        </div>
+                    </div>
                 </div>
-                <div className="w-full bg-slate-700 rounded-full h-2">
-                    <div
-                        className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-                        style={{ width: `${(moduleProgress.levelsCompleted / levels.length) * 100}%` }}
-                    />
-                </div>
-            </div>
 
-            {/* Level Grid */}
-            <div className="flex-1 max-w-4xl mx-auto w-full">
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                    {levels.map((level, index) => {
-                        const isUnlocked = index <= moduleProgress.unlockedIndex;
-                        const stars = moduleProgress.starsPerLevel[index] || 0;
-                        const isCompleted = stars > 0;
-
-                        return (
-                            <button
-                                key={level.id}
-                                onClick={() => handleLevelSelect(index)}
-                                disabled={!isUnlocked}
-                                className={`
-                                    relative p-4 rounded-xl transition-all duration-300 aspect-square flex flex-col items-center justify-center
-                                    ${isUnlocked
-                                        ? isCompleted
-                                            ? 'bg-slate-700/80 hover:bg-slate-600/80 border border-green-600/50 hover:border-green-500'
-                                            : 'bg-slate-800/80 hover:bg-slate-700/80 border border-slate-600 hover:border-slate-500'
-                                        : 'bg-slate-900/60 cursor-not-allowed border border-slate-800 opacity-50'
-                                    }
-                                `}
+                {/* Drone Visual Panel (Left side) */}
+                <div className="absolute left-8 top-1/2 transform -translate-y-1/2 w-72 z-10">
+                    <div className="bg-slate-900/40 backdrop-blur-md rounded-lg border-2 border-cyan-500/30 shadow-[0_0_20px_rgba(0,217,255,0.2)] p-6">
+                        <img
+                            src="/drone.png"
+                            alt="Drone Model"
+                            className="w-full h-auto drop-shadow-[0_0_30px_rgba(0,217,255,0.5)]"
+                        />
+                        <div className="mt-4 space-y-1 text-xs">
+                            <p
+                                className="text-cyan-400"
+                                style={{ fontFamily: "'JetBrains Mono', monospace" }}
                             >
-                                {/* Lock icon for locked levels */}
-                                {!isUnlocked && (
-                                    <span className="text-2xl text-slate-600">🔒</span>
-                                )}
-
-                                {/* Level number */}
-                                {isUnlocked && (
-                                    <>
-                                        <span className="text-2xl font-bold text-white mb-2">
-                                            {index + 1}
-                                        </span>
-
-                                        {/* Stars */}
-                                        <div className="flex gap-0.5">
-                                            {[1, 2, 3].map(star => (
-                                                <span
-                                                    key={star}
-                                                    className={`text-sm ${star <= stars ? 'text-yellow-400' : 'text-slate-600'}`}
-                                                >
-                                                    ★
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
-
-                                {/* Current level indicator */}
-                                {isUnlocked && !isCompleted && index === moduleProgress.unlockedIndex && (
-                                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
-                                )}
-                            </button>
-                        );
-                    })}
+                                DRONE MODEL: VECTRON X-1
+                            </p>
+                            <p className="text-slate-500">STATUS: ACTIVE // READY</p>
+                            <p className="text-slate-500">VECTOR LOCK: ENGAGED</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            {/* Level Info Panel (shows when hovering) */}
-            <div className="max-w-4xl mx-auto w-full mt-8">
-                <div className="bg-slate-800/60 rounded-lg p-4 text-center">
-                    <p className="text-slate-400 text-sm">
-                        Click on an unlocked level to start playing
-                    </p>
+                {/* Level Grid - Hexagonal Path */}
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="max-w-2xl">
+                        <div className="flex flex-wrap justify-center gap-6 items-center">
+                            {levels.map((level, index) => {
+                                const isUnlocked = index <= moduleProgress.unlockedIndex;
+                                const stars = moduleProgress.starsPerLevel[index] || 0;
+                                const isCurrentLevel = index === moduleProgress.unlockedIndex && stars === 0;
+
+                                return (
+                                    <HexagonalLevelCell
+                                        key={level.id}
+                                        levelNumber={index + 1}
+                                        isUnlocked={isUnlocked}
+                                        stars={stars}
+                                        isCurrentLevel={isCurrentLevel}
+                                        onClick={() => handleLevelSelect(index)}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Info Bar */}
+                <div className="mt-8 max-w-2xl mx-auto w-full">
+                    <div className="bg-slate-900/40 backdrop-blur-md rounded-lg border border-cyan-500/30 p-4 text-center shadow-[0_0_15px_rgba(0,217,255,0.2)]">
+                        <p className="text-cyan-300 text-sm">
+                            <span
+                                className="font-bold"
+                                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                            >
+                                [{moduleProgress.levelsCompleted}/{levels.length}]
+                            </span>{' '}
+                            MISSIONS COMPLETED // SELECT UNLOCKED HEXAGON TO ENGAGE
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

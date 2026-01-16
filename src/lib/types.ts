@@ -21,6 +21,12 @@ export type ScreenType = 'menu' | 'game' | 'levelSelect' | 'career';
 // Level Configuration Types
 // ============================================
 
+// Vector concept for educational tooltips
+export interface VectorConcept {
+    name: string;
+    briefDescription: string;
+}
+
 // Base level config (shared across all modules)
 export interface BaseLevelConfig {
     id: number;
@@ -31,6 +37,7 @@ export interface BaseLevelConfig {
     tolerance: number;      // Evaluation tolerance
     maxAttempts: number;
     hints: string[];
+    vectorConcept?: VectorConcept;
     gridConfig?: {
         size: number;
         labels?: boolean;

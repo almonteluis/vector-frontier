@@ -57,7 +57,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0], STANDARD_MATERIALS[3]],
         budget: 100,
         safetyFactor: 1.5,
-        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Static Equilibrium",
+            briefDescription: "When all forces sum to zero, a structure remains stationary and stable."
+        }
     },
     {
         id: 202,
@@ -79,7 +83,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0]],
         budget: 120,
         safetyFactor: 1.5,
-        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Moment Balance",
+            briefDescription: "Rotational equilibrium requires balancing moments (torques) about any point."
+        }
     },
     {
         id: 203,
@@ -102,7 +110,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0], STANDARD_MATERIALS[1]],
         budget: 150,
         safetyFactor: 1.5,
-        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Superposition",
+            briefDescription: "Multiple loads can be analyzed by summing their individual effects."
+        }
     },
     {
         id: 204,
@@ -125,7 +137,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0]],
         budget: 140,
         safetyFactor: 1.5,
-        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "2D Force Equilibrium",
+            briefDescription: "Both horizontal and vertical force components must independently sum to zero."
+        }
     },
     {
         id: 205,
@@ -147,7 +163,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: STANDARD_MATERIALS,
         budget: 50,
         safetyFactor: 1.5,
-        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Material Selection",
+            briefDescription: "Choosing materials based on force requirements and cost constraints."
+        }
     },
     {
         id: 206,
@@ -169,7 +189,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0], STANDARD_MATERIALS[2]],
         budget: 200,
         safetyFactor: 2.0,
-        bridgeSpan: { start: { x: -4, y: 0, z: 0 }, end: { x: 4, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -4, y: 0, z: 0 }, end: { x: 4, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Truss Analysis",
+            briefDescription: "Truss members carry only axial forces - tension or compression along their length."
+        }
     },
     {
         id: 207,
@@ -191,7 +215,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0], STANDARD_MATERIALS[1]],
         budget: 180,
         safetyFactor: 2.0,
-        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Factor of Safety",
+            briefDescription: "Designing structures to withstand loads greater than expected for reliability."
+        }
     },
     {
         id: 208,
@@ -218,7 +246,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0]],
         budget: 200,
         safetyFactor: 1.8,
-        bridgeSpan: { start: { x: -6, y: 0, z: 0 }, end: { x: 6, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -6, y: 0, z: 0 }, end: { x: 6, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Moving Load Analysis",
+            briefDescription: "Dynamic loads change position - design must handle the worst-case scenario."
+        }
     },
     {
         id: 209,
@@ -241,7 +273,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0], STANDARD_MATERIALS[2]],
         budget: 250,
         safetyFactor: 2.0,
-        bridgeSpan: { start: { x: -6, y: 0, z: 0 }, end: { x: 6, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -6, y: 0, z: 0 }, end: { x: 6, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Tension-Only Members",
+            briefDescription: "Cables can only resist pulling forces - they buckle under compression."
+        }
     },
     {
         id: 210,
@@ -265,7 +301,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0], STANDARD_MATERIALS[1]],
         budget: 300,
         safetyFactor: 1.8,
-        bridgeSpan: { start: { x: -8, y: 0, z: 0 }, end: { x: 8, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -8, y: 0, z: 0 }, end: { x: 8, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Continuous Spans",
+            briefDescription: "Multi-span bridges distribute loads between supports based on position."
+        }
     },
     {
         id: 211,
@@ -288,7 +328,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: STANDARD_MATERIALS,
         budget: 280,
         safetyFactor: 2.5,
-        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -5, y: 0, z: 0 }, end: { x: 5, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Seismic Loading",
+            briefDescription: "Earthquakes create dynamic lateral forces requiring special design considerations."
+        }
     },
     {
         id: 212,
@@ -311,7 +355,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: STANDARD_MATERIALS,
         budget: 150,
         safetyFactor: 2.0,
-        bridgeSpan: { start: { x: -6, y: 0, z: 0 }, end: { x: 6, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -6, y: 0, z: 0 }, end: { x: 6, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Design Optimization",
+            briefDescription: "Finding the most cost-effective solution that meets all structural requirements."
+        }
     },
     {
         id: 213,
@@ -333,7 +381,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: [STANDARD_MATERIALS[0], STANDARD_MATERIALS[2]],
         budget: 350,
         safetyFactor: 2.0,
-        bridgeSpan: { start: { x: -10, y: 0, z: 0 }, end: { x: 10, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -10, y: 0, z: 0 }, end: { x: 10, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Long-Span Design",
+            briefDescription: "Longer spans dramatically increase internal forces and design complexity."
+        }
     },
     {
         id: 214,
@@ -358,7 +410,11 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: STANDARD_MATERIALS,
         budget: 400,
         safetyFactor: 2.0,
-        bridgeSpan: { start: { x: -8, y: 0, z: 0 }, end: { x: 8, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -8, y: 0, z: 0 }, end: { x: 8, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Distributed Loading",
+            briefDescription: "Multiple loads create complex force distributions requiring careful analysis."
+        }
     },
     {
         id: 215,
@@ -383,6 +439,10 @@ export const BRIDGE_LEVELS: BridgeLevelConfig[] = [
         materials: STANDARD_MATERIALS,
         budget: 300,
         safetyFactor: 2.5,
-        bridgeSpan: { start: { x: -8, y: 0, z: 0 }, end: { x: 8, y: 0, z: 0 } }
+        bridgeSpan: { start: { x: -8, y: 0, z: 0 }, end: { x: 8, y: 0, z: 0 } },
+        vectorConcept: {
+            name: "Engineering Mastery",
+            briefDescription: "Integrating all structural concepts: equilibrium, safety, materials, and optimization."
+        }
     }
 ];

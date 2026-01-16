@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback, useRef } from 'react';
 
 interface HexagonalLevelCellProps {
     levelNumber: number;
@@ -6,6 +6,7 @@ interface HexagonalLevelCellProps {
     stars: number;
     isCurrentLevel: boolean;
     onClick: () => void;
+    onHover?: (isHovered: boolean, rect: DOMRect | null) => void;
 }
 
 // Hexagonal clip-path for the cell
@@ -17,14 +18,48 @@ export const HexagonalLevelCell = memo<HexagonalLevelCellProps>(({
     isUnlocked,
     stars,
     isCurrentLevel,
-    onClick
+    onClick,
+    onHover,
 }) => {
+    const buttonRef = useRef<HTMLButtonElement>(null);
     const isCompleted = stars > 0;
+
+    const handleMouseEnter = useCallback(() => {
+        if (onHover && buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            onHover(true, rect);
+        }
+    }, [onHover]);
+
+    const handleMouseLeave = useCallback(() => {
+        if (onHover) {
+            onHover(false, null);
+        }
+    }, [onHover]);
+
+    const handleFocus = useCallback(() => {
+        if (onHover && buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            onHover(true, rect);
+        }
+    }, [onHover]);
+
+    const handleBlur = useCallback(() => {
+        if (onHover) {
+            onHover(false, null);
+        }
+    }, [onHover]);
 
     return (
         <button
+            ref={buttonRef}
             onClick={onClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             disabled={!isUnlocked}
+            aria-label={`Level ${levelNumber}${isUnlocked ? '' : ' (Locked)'}${stars > 0 ? `, ${stars} stars earned` : ''}`}
             className={`
                 relative w-28 h-32 transition-all duration-300
                 ${isUnlocked ? 'cursor-pointer hover:scale-110' : 'cursor-not-allowed opacity-50'}
@@ -53,7 +88,7 @@ export const HexagonalLevelCell = memo<HexagonalLevelCellProps>(({
             {/* Hexagon Border Glow */}
             <div
                 className={`
-                    absolute inset-0 
+                    absolute inset-0
                     ${isUnlocked
                         ? isCurrentLevel
                             ? 'animate-pulse shadow-[0_0_20px_rgba(0,217,255,0.8)]'

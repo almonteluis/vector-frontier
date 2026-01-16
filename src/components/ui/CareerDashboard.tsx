@@ -1,162 +1,232 @@
-import React from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { CAREER_BADGES } from '../../lib/career/badges';
-import type { GameModule, BadgeTier } from '../../lib/types';
-
-const TIER_COLORS: Record<BadgeTier, string> = {
-    bronze: 'from-amber-700 to-amber-600',
-    silver: 'from-slate-400 to-slate-300',
-    gold: 'from-yellow-500 to-yellow-400',
-};
-
-const TIER_BORDERS: Record<BadgeTier, string> = {
-    bronze: 'border-amber-600',
-    silver: 'border-slate-400',
-    gold: 'border-yellow-500',
-};
-
-const MODULE_NAMES: Record<GameModule, string> = {
-    abstract: 'Abstract',
-    drone: 'Drone',
-    bridge: 'Bridge',
-    robotics: 'Robotics',
-};
+import { getLevelCount } from '../../lib/levels';
+import type { GameModule } from '../../lib/types';
+import { GAME_MODULES, MODULE_NAMES } from '../../lib/theme/moduleTheme';
+import { CircularProgressGauge } from './CircularProgressGauge';
+import { ModuleAchievementCard } from './ModuleAchievementCard';
+import { ModuleFilterBar } from './ModuleFilterBar';
+import { ModuleSectionHeader } from './ModuleSectionHeader';
 
 export const CareerDashboard: React.FC = () => {
     const setScreen = useGameStore(s => s.setScreen);
     const careerProgress = useGameStore(s => s.careerProgress);
 
-    const earnedBadgeIds = new Set(careerProgress.earnedBadges);
+    const [filterModules, setFilterModules] = useState<GameModule[] | 'all'>('all');
 
-    const handleBack = () => {
+    const earnedBadgeIds = useMemo(
+        () => new Set(careerProgress.earnedBadges),
+        [careerProgress.earnedBadges]
+    );
+
+    const handleBack = useCallback(() => {
         setScreen('menu');
-    };
+    }, [setScreen]);
 
     // Group badges by module
-    const badgesByModule = CAREER_BADGES.reduce((acc, badge) => {
-        if (!acc[badge.module]) {
-            acc[badge.module] = [];
+    const badgesByModule = useMemo(() => {
+        return CAREER_BADGES.reduce((acc, badge) => {
+            if (!acc[badge.module]) {
+                acc[badge.module] = [];
+            }
+            acc[badge.module].push(badge);
+            return acc;
+        }, {} as Record<GameModule, typeof CAREER_BADGES>);
+    }, []);
+
+    // Filter badges based on selected modules
+    const filteredModules = useMemo(() => {
+        if (filterModules === 'all') {
+            return GAME_MODULES;
         }
-        acc[badge.module].push(badge);
-        return acc;
-    }, {} as Record<GameModule, typeof CAREER_BADGES>);
+        return filterModules;
+    }, [filterModules]);
+
+    // Calculate total stats
+    const totalStats = useMemo(() => {
+        let totalLevelsCompleted = 0;
+        let totalMaxLevels = 0;
+
+        GAME_MODULES.forEach(module => {
+            totalLevelsCompleted += careerProgress.moduleProgress[module].levelsCompleted;
+            totalMaxLevels += getLevelCount(module);
+        });
+
+        return { totalLevelsCompleted, totalMaxLevels };
+    }, [careerProgress.moduleProgress]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex flex-col p-8">
+        <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex flex-col p-4 sm:p-6 lg:p-8">
             {/* Header */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-6">
                 <button
                     onClick={handleBack}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-white transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-slate-800/60 backdrop-blur-md hover:bg-slate-700/60 rounded-lg text-cyan-400 border border-cyan-500/50 transition-colors flex items-center gap-2 shadow-[0_0_15px_rgba(0,217,255,0.2)]"
+                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 >
                     <span>←</span>
                     Back
                 </button>
 
                 <div className="text-center">
-                    <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
+                    <h1
+                        className="text-2xl sm:text-3xl font-bold text-white tracking-wider"
+                        style={{ textShadow: '0 0 20px rgba(0, 217, 255, 0.5)' }}
+                    >
                         Career Progress
                     </h1>
+                    <p
+                        className="text-cyan-400 text-xs tracking-widest mt-1"
+                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                        MISSION STATISTICS
+                    </p>
                 </div>
 
                 <div className="text-right">
-                    <div className="text-3xl text-yellow-400 font-bold">
+                    <div
+                        className="text-2xl sm:text-3xl text-yellow-400 font-bold"
+                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
                         {careerProgress.totalStars} ★
                     </div>
-                    <div className="text-sm text-slate-500">Total Stars</div>
+                    <div className="text-xs text-slate-500 uppercase tracking-wider">Total Stars</div>
                 </div>
             </div>
 
-            {/* Overall Stats */}
-            <div className="max-w-4xl mx-auto w-full mb-8">
-                <div className="grid grid-cols-4 gap-4">
-                    {(['abstract', 'drone', 'bridge', 'robotics'] as GameModule[]).map(module => {
-                        const progress = careerProgress.moduleProgress[module];
+            {/* Module Progress Gauges */}
+            <div className="max-w-5xl mx-auto w-full mb-6">
+                <div className="bg-slate-800/40 backdrop-blur-md rounded-xl border border-cyan-500/30 p-4 sm:p-6 shadow-[0_0_20px_rgba(0,217,255,0.15)]">
+                    <h2
+                        className="text-cyan-400 text-sm font-semibold mb-4 uppercase tracking-wider text-center"
+                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                        Module Completion
+                    </h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 justify-items-center">
+                        {GAME_MODULES.map(module => {
+                            const progress = careerProgress.moduleProgress[module];
+                            const maxLevels = getLevelCount(module);
+                            return (
+                                <CircularProgressGauge
+                                    key={module}
+                                    value={progress.levelsCompleted}
+                                    max={maxLevels}
+                                    label={MODULE_NAMES[module]}
+                                    module={module}
+                                    size="md"
+                                />
+                            );
+                        })}
+                    </div>
+
+                    {/* Overall Progress Bar */}
+                    <div className="mt-6 pt-4 border-t border-slate-700/50">
+                        <div className="flex justify-between text-xs text-slate-400 mb-2">
+                            <span style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                                OVERALL PROGRESS
+                            </span>
+                            <span style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                                {totalStats.totalLevelsCompleted}/{totalStats.totalMaxLevels} LEVELS
+                            </span>
+                        </div>
+                        <div className="h-2 bg-slate-700/50 rounded-full overflow-hidden">
+                            <div
+                                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-500"
+                                style={{
+                                    width: `${(totalStats.totalLevelsCompleted / totalStats.totalMaxLevels) * 100}%`,
+                                    boxShadow: '0 0 10px rgba(0, 217, 255, 0.5)',
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Achievement Filter */}
+            <div className="max-w-5xl mx-auto w-full mb-4">
+                <ModuleFilterBar
+                    selectedModules={filterModules}
+                    onFilterChange={setFilterModules}
+                />
+            </div>
+
+            {/* Badges Section */}
+            <div className="flex-1 max-w-5xl mx-auto w-full overflow-y-auto">
+                <div className="flex items-center justify-between mb-4">
+                    <h2
+                        className="text-xl font-bold text-white"
+                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                        Achievements
+                    </h2>
+                    <div
+                        className="text-sm text-cyan-400"
+                        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                        {careerProgress.earnedBadges.length}/{CAREER_BADGES.length} UNLOCKED
+                    </div>
+                </div>
+
+                <div className="space-y-6 pb-4">
+                    {filteredModules.map(module => {
+                        const moduleBadges = badgesByModule[module] || [];
+                        const earnedCount = moduleBadges.filter(b => earnedBadgeIds.has(b.id)).length;
+
                         return (
-                            <div key={module} className="bg-slate-800/60 rounded-lg p-4 text-center">
-                                <div className="text-2xl mb-2">
-                                    {module === 'abstract' ? '🎯' : module === 'drone' ? '🛸' : module === 'bridge' ? '🌉' : '🤖'}
+                            <div key={module}>
+                                <ModuleSectionHeader
+                                    module={module}
+                                    badgeCount={moduleBadges.length}
+                                    earnedCount={earnedCount}
+                                />
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                    {moduleBadges.map(badge => (
+                                        <ModuleAchievementCard
+                                            key={badge.id}
+                                            badge={badge}
+                                            isEarned={earnedBadgeIds.has(badge.id)}
+                                        />
+                                    ))}
                                 </div>
-                                <div className="text-lg font-bold text-white">{progress.levelsCompleted}</div>
-                                <div className="text-xs text-slate-400">Levels</div>
-                                <div className="text-sm text-yellow-400 mt-1">{progress.starsEarned} ★</div>
                             </div>
                         );
                     })}
                 </div>
             </div>
 
-            {/* Badges Section */}
-            <div className="flex-1 max-w-4xl mx-auto w-full overflow-y-auto">
-                <h2 className="text-xl font-bold text-white mb-4">Achievements</h2>
-
-                <div className="space-y-8">
-                    {(['abstract', 'drone', 'bridge', 'robotics'] as GameModule[]).map(module => (
-                        <div key={module}>
-                            <h3 className="text-lg font-semibold text-slate-300 mb-3 flex items-center gap-2">
-                                {module === 'abstract' ? '🎯' : module === 'drone' ? '🛸' : module === 'bridge' ? '🌉' : '🤖'}
-                                {MODULE_NAMES[module]} Achievements
-                            </h3>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                {(badgesByModule[module] || []).map(badge => {
-                                    const isEarned = earnedBadgeIds.has(badge.id);
-
-                                    return (
-                                        <div
-                                            key={badge.id}
-                                            className={`
-                                                p-4 rounded-xl border-2 transition-all
-                                                ${isEarned
-                                                    ? `bg-gradient-to-br ${TIER_COLORS[badge.tier]} ${TIER_BORDERS[badge.tier]}`
-                                                    : 'bg-slate-800/40 border-slate-700 opacity-50'
-                                                }
-                                            `}
-                                        >
-                                            <div className="flex items-start gap-3">
-                                                <div className="text-3xl">
-                                                    {isEarned ? badge.icon : '🔒'}
-                                                </div>
-                                                <div className="flex-1">
-                                                    <h4 className={`font-bold ${isEarned ? 'text-slate-900' : 'text-slate-400'}`}>
-                                                        {badge.name}
-                                                    </h4>
-                                                    <p className={`text-sm ${isEarned ? 'text-slate-800' : 'text-slate-500'}`}>
-                                                        {badge.description}
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            {/* Requirements */}
-                                            {!isEarned && (
-                                                <div className="mt-3 text-xs text-slate-500">
-                                                    {badge.requirements.levelsCompleted && (
-                                                        <div>Complete {badge.requirements.levelsCompleted} levels</div>
-                                                    )}
-                                                    {badge.requirements.starsEarned && (
-                                                        <div>Earn {badge.requirements.starsEarned} stars</div>
-                                                    )}
-                                                    {badge.requirements.perfectLevels && (
-                                                        <div>Perfect {badge.requirements.perfectLevels} levels</div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
+            {/* Footer Stats */}
+            <div className="max-w-5xl mx-auto w-full mt-4 pt-4 border-t border-slate-700/50">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                    <div className="bg-slate-800/40 rounded-lg p-3">
+                        <div
+                            className="text-xl font-bold text-cyan-400"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                            {totalStats.totalLevelsCompleted}
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Badge Count */}
-            <div className="max-w-4xl mx-auto w-full mt-8 text-center">
-                <div className="bg-slate-800/60 rounded-lg p-4">
-                    <div className="text-2xl font-bold text-white">
-                        {careerProgress.earnedBadges.length} / {CAREER_BADGES.length}
+                        <div className="text-xs text-slate-500 uppercase">Levels Done</div>
                     </div>
-                    <div className="text-sm text-slate-400">Badges Earned</div>
+                    <div className="bg-slate-800/40 rounded-lg p-3">
+                        <div
+                            className="text-xl font-bold text-yellow-400"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                            {careerProgress.totalStars}
+                        </div>
+                        <div className="text-xs text-slate-500 uppercase">Stars Earned</div>
+                    </div>
+                    <div className="bg-slate-800/40 rounded-lg p-3">
+                        <div
+                            className="text-xl font-bold text-fuchsia-400"
+                            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                        >
+                            {careerProgress.earnedBadges.length}
+                        </div>
+                        <div className="text-xs text-slate-500 uppercase">Badges</div>
+                    </div>
                 </div>
             </div>
         </div>

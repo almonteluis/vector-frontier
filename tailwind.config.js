@@ -18,6 +18,12 @@ export default {
                 hint: '#8A2BE2',
                 textPrimary: '#F8FAFC',
                 textSecondary: '#94A3B8',
+                module: {
+                    abstract: '#d946ef',
+                    drone: '#00d9ff',
+                    bridge: '#f59e0b',
+                    robotics: '#84cc16',
+                },
             }
         },
     },

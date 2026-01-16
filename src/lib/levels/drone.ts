@@ -18,7 +18,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 0, z: 0 }, variance: 0 },
         battery: { maxCapacity: 100, drainPerUnit: 5 },
         deliveryTargets: [{ x: 5, y: 2, z: 0 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Displacement Vectors",
+            briefDescription: "A displacement vector represents the change in position from start to end point."
+        }
     },
     {
         id: 102,
@@ -37,7 +41,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 1, y: 0, z: 0 }, variance: 0 },
         battery: { maxCapacity: 100, drainPerUnit: 5 },
         deliveryTargets: [{ x: 5, y: 2, z: 0 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Vector Compensation",
+            briefDescription: "Counteracting external forces by adding an opposing vector component."
+        }
     },
     {
         id: 103,
@@ -56,7 +64,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 0, z: -2 }, variance: 0 },
         battery: { maxCapacity: 100, drainPerUnit: 5 },
         deliveryTargets: [{ x: 4, y: 3, z: 0 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Crab Angle",
+            briefDescription: "Angling into crosswinds to maintain a straight ground track - key in aviation."
+        }
     },
     {
         id: 104,
@@ -75,7 +87,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: -3, y: 0, z: 0 }, variance: 0 },
         battery: { maxCapacity: 150, drainPerUnit: 8 },
         deliveryTargets: [{ x: 6, y: 2, z: 0 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Resultant Velocity",
+            briefDescription: "The actual velocity is the sum of thrust and environmental forces like wind."
+        }
     },
     {
         id: 105,
@@ -94,7 +110,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 2, y: 0, z: 2 }, variance: 0 },
         battery: { maxCapacity: 120, drainPerUnit: 6 },
         deliveryTargets: [{ x: 5, y: 3, z: 4 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Multi-Component Wind",
+            briefDescription: "Real wind has multiple directional components requiring comprehensive compensation."
+        }
     },
     {
         id: 106,
@@ -113,7 +133,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 0, z: 0 }, variance: 0 },
         battery: { maxCapacity: 40, drainPerUnit: 6 },
         deliveryTargets: [{ x: 4, y: 2, z: 3 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Optimal Path",
+            briefDescription: "The shortest distance between two points minimizes energy consumption."
+        }
     },
     {
         id: 107,
@@ -132,7 +156,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 0, z: 0 }, variance: 0 },
         battery: { maxCapacity: 100, drainPerUnit: 5 },
         deliveryTargets: [{ x: 3, y: 2, z: 0 }, { x: 7, y: 2, z: 0 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Waypoint Navigation",
+            briefDescription: "Breaking a route into sequential vectors connecting waypoints."
+        }
     },
     {
         id: 108,
@@ -151,7 +179,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 1, y: 0, z: -1 }, variance: 0.5, noiseFrequency: 0.3 },
         battery: { maxCapacity: 100, drainPerUnit: 5 },
         deliveryTargets: [{ x: 5, y: 2, z: 3 }],
-        weatherEffects: 'rain'
+        weatherEffects: 'rain',
+        vectorConcept: {
+            name: "Uncertainty & Tolerance",
+            briefDescription: "Variable conditions require building margin into vector calculations."
+        }
     },
     {
         id: 109,
@@ -170,7 +202,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 0.5, z: 0 }, variance: 0 },
         battery: { maxCapacity: 120, drainPerUnit: 6 },
         deliveryTargets: [{ x: 4, y: 0, z: 4 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Vertical Maneuvering",
+            briefDescription: "Strategic altitude changes to navigate around obstacles or terrain."
+        }
     },
     {
         id: 110,
@@ -189,7 +225,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: -2, y: 0.5, z: 1 }, variance: 1, noiseFrequency: 0.5 },
         battery: { maxCapacity: 150, drainPerUnit: 7 },
         deliveryTargets: [{ x: 6, y: 3, z: 2 }],
-        weatherEffects: 'rain'
+        weatherEffects: 'rain',
+        vectorConcept: {
+            name: "Course Correction",
+            briefDescription: "Using intermediate vectors to adjust trajectory mid-flight."
+        }
     },
     {
         id: 111,
@@ -208,7 +248,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 1, y: 0, z: 0 }, variance: 0.3 },
         battery: { maxCapacity: 130, drainPerUnit: 6 },
         deliveryTargets: [{ x: 5, y: 4, z: -3 }],
-        weatherEffects: 'fog'
+        weatherEffects: 'fog',
+        vectorConcept: {
+            name: "Instrument Navigation",
+            briefDescription: "Relying on numerical data when visual references are unavailable."
+        }
     },
     {
         id: 112,
@@ -227,7 +271,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 2, y: 0, z: 0 }, variance: 0 },
         battery: { maxCapacity: 100, drainPerUnit: 5 },
         deliveryTargets: [{ x: 8, y: 2, z: 4 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Tailwind Advantage",
+            briefDescription: "Environmental forces can assist rather than hinder when properly utilized."
+        }
     },
     {
         id: 113,
@@ -246,7 +294,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 0, z: 0 }, variance: 0 },
         battery: { maxCapacity: 140, drainPerUnit: 5 },
         deliveryTargets: [{ x: 3, y: 2, z: 0 }, { x: 6, y: 2, z: 2 }, { x: 9, y: 2, z: 3 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Route Optimization",
+            briefDescription: "Planning efficient multi-stop routes using sequential vector chains."
+        }
     },
     {
         id: 114,
@@ -265,7 +317,11 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 1.5, z: -1 }, variance: 0.5 },
         battery: { maxCapacity: 160, drainPerUnit: 7 },
         deliveryTargets: [{ x: 5, y: 5, z: 5 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Updraft Utilization",
+            briefDescription: "Vertical wind components can reduce energy needed for climbing."
+        }
     },
     {
         id: 115,
@@ -284,6 +340,10 @@ export const DRONE_LEVELS: DroneLevelConfig[] = [
         wind: { base: { x: 0, y: 0, z: -2.5 }, variance: 0.3 },
         battery: { maxCapacity: 120, drainPerUnit: 6 },
         deliveryTargets: [{ x: 7, y: 3, z: -4 }],
-        weatherEffects: 'clear'
+        weatherEffects: 'clear',
+        vectorConcept: {
+            name: "Precision Delivery",
+            briefDescription: "Critical applications demand exact vector calculations with minimal error."
+        }
     }
 ];

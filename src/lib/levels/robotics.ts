@@ -26,7 +26,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             }
         ],
         pickupTarget: { x: 4, y: 0, z: 0 },
-        placeTarget: { x: 4, y: 0, z: 0 }
+        placeTarget: { x: 4, y: 0, z: 0 },
+        vectorConcept: {
+            name: "Forward Kinematics",
+            briefDescription: "Calculating end position from joint angles using vector geometry."
+        }
     },
     {
         id: 302,
@@ -53,7 +57,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             }
         ],
         pickupTarget: { x: 0, y: 4, z: 0 },
-        placeTarget: { x: 0, y: 4, z: 0 }
+        placeTarget: { x: 0, y: 4, z: 0 },
+        vectorConcept: {
+            name: "Angular Position",
+            briefDescription: "Joint angles determine the direction and reach of robot arm segments."
+        }
     },
     {
         id: 303,
@@ -87,7 +95,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             }
         ],
         pickupTarget: { x: 5, y: 3, z: 0 },
-        placeTarget: { x: 5, y: 3, z: 0 }
+        placeTarget: { x: 5, y: 3, z: 0 },
+        vectorConcept: {
+            name: "Serial Kinematics",
+            briefDescription: "Multi-joint arms add vectors tip-to-tail to reach extended positions."
+        }
     },
     {
         id: 304,
@@ -121,7 +133,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             }
         ],
         pickupTarget: { x: 4, y: -2, z: 0 },
-        placeTarget: { x: 4, y: -2, z: 0 }
+        placeTarget: { x: 4, y: -2, z: 0 },
+        vectorConcept: {
+            name: "Joint Constraints",
+            briefDescription: "Physical limits on joint rotation define the robot's reachable workspace."
+        }
     },
     {
         id: 305,
@@ -156,7 +172,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
         ],
         pickupTarget: { x: 4, y: 1, z: 0 },
         placeTarget: { x: -3, y: 2, z: 0 },
-        sequence: ['pick', 'move', 'place']
+        sequence: ['pick', 'move', 'place'],
+        vectorConcept: {
+            name: "Task Sequencing",
+            briefDescription: "Complex tasks require planning multiple arm configurations in sequence."
+        }
     },
     {
         id: 306,
@@ -197,7 +217,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             }
         ],
         pickupTarget: { x: 3, y: 4, z: 0 },
-        placeTarget: { x: 3, y: 4, z: 0 }
+        placeTarget: { x: 3, y: 4, z: 0 },
+        vectorConcept: {
+            name: "Redundant Kinematics",
+            briefDescription: "Extra joints provide multiple ways to reach the same position."
+        }
     },
     {
         id: 307,
@@ -234,7 +258,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
         placeTarget: { x: 4, y: 2, z: 0 },
         obstacles: [
             { position: { x: 2, y: 1, z: 0 }, size: { x: 1, y: 2, z: 1 } }
-        ]
+        ],
+        vectorConcept: {
+            name: "Collision Avoidance",
+            briefDescription: "Planning arm paths that avoid obstacles while reaching the target."
+        }
     },
     {
         id: 308,
@@ -279,7 +307,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
         obstacles: [
             { position: { x: 1, y: 2, z: 0 }, size: { x: 0.5, y: 1, z: 1 } },
             { position: { x: 2, y: 0.5, z: 0 }, size: { x: 1.5, y: 0.5, z: 1 } }
-        ]
+        ],
+        vectorConcept: {
+            name: "Workspace Analysis",
+            briefDescription: "Understanding the reachable space considering obstacles and joint limits."
+        }
     },
     {
         id: 309,
@@ -314,7 +346,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
         ],
         pickupTarget: { x: 4, y: 1, z: 0 },
         placeTarget: { x: -4, y: 1, z: 0 },
-        sequence: ['pick', 'move', 'place']
+        sequence: ['pick', 'move', 'place'],
+        vectorConcept: {
+            name: "Motion Programming",
+            briefDescription: "Defining repeatable motion sequences for automated manufacturing tasks."
+        }
     },
     {
         id: 310,
@@ -349,7 +385,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
         ],
         pickupTarget: { x: 3.5, y: 2.5, z: 0 },
         placeTarget: { x: 3.5, y: 2.5, z: 0 },
-        precisionRequired: 0.25
+        precisionRequired: 0.25,
+        vectorConcept: {
+            name: "Precision Positioning",
+            briefDescription: "Fine control of joint angles for exact end effector placement."
+        }
     },
     {
         id: 311,
@@ -384,7 +424,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
         ],
         pickupTarget: { x: 4, y: 3, z: 0 },
         placeTarget: { x: 4, y: 3, z: 0 },
-        speedLimit: 2
+        speedLimit: 2,
+        vectorConcept: {
+            name: "Cycle Time Optimization",
+            briefDescription: "Minimizing joint travel reduces operation time in repetitive tasks."
+        }
     },
     {
         id: 312,
@@ -426,7 +470,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
         ],
         pickupTarget: { x: 4, y: 2, z: 0 },
         placeTarget: { x: 0, y: 5, z: 0 },
-        sequence: ['pick', 'move', 'place']
+        sequence: ['pick', 'move', 'place'],
+        vectorConcept: {
+            name: "Multi-Target Planning",
+            briefDescription: "Coordinating arm movements to handle multiple objects efficiently."
+        }
     },
     {
         id: 313,
@@ -460,7 +508,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             }
         ],
         pickupTarget: { x: 5.5, y: 0, z: 0 },
-        placeTarget: { x: 5.5, y: 0, z: 0 }
+        placeTarget: { x: 5.5, y: 0, z: 0 },
+        vectorConcept: {
+            name: "Reach Envelope",
+            briefDescription: "The boundary of all positions reachable by the robot arm."
+        }
     },
     {
         id: 314,
@@ -506,7 +558,11 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             { position: { x: 0, y: 2, z: 0 }, size: { x: 2, y: 1, z: 1 } },
             { position: { x: -1, y: 0.5, z: 0 }, size: { x: 1, y: 1, z: 1 } }
         ],
-        sequence: ['pick', 'move', 'place']
+        sequence: ['pick', 'move', 'place'],
+        vectorConcept: {
+            name: "Path Planning",
+            briefDescription: "Finding collision-free paths through complex environments."
+        }
     },
     {
         id: 315,
@@ -553,6 +609,10 @@ export const ROBOTICS_LEVELS: RoboticsLevelConfig[] = [
             { position: { x: -2, y: 1, z: 0 }, size: { x: 1.5, y: 1, z: 1 } }
         ],
         sequence: ['pick', 'move', 'place'],
-        precisionRequired: 0.2
+        precisionRequired: 0.2,
+        vectorConcept: {
+            name: "Robotics Mastery",
+            briefDescription: "Integrating kinematics, path planning, and precision for complex automation."
+        }
     }
 ];

@@ -1,24 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { getLevelsForModule } from '../../lib/levels';
-import type { GameModule } from '../../lib/types';
+import type { ModuleLevelConfig } from '../../lib/types';
+import { MODULE_TITLES, MODULE_SUBTITLES } from '../../lib/theme/moduleTheme';
 import { HexagonalLevelCell } from './HexagonalLevelCell';
 import { MissionControlPanel } from './MissionControlPanel';
 import { TacticalBackground } from './TacticalBackground';
+import { MissionBriefingTooltip } from './MissionBriefingTooltip';
 
-const MODULE_TITLES: Record<GameModule, string> = {
-    abstract: 'Abstract Puzzles',
-    drone: 'Drone Delivery',
-    bridge: 'Bridge Engineering',
-    robotics: 'Robotics Assembly',
-};
-
-const MODULE_SUBTITLES: Record<GameModule, string> = {
-    abstract: 'VECTOR LOGIC ENGAGED',
-    drone: 'VECTOR NAVIGATION ENGAGED',
-    bridge: 'STRUCTURAL ANALYSIS ENGAGED',
-    robotics: 'MECHANICAL SYSTEMS ENGAGED',
-};
+interface HoveredLevel {
+    level: ModuleLevelConfig;
+    index: number;
+    rect: DOMRect;
+}
 
 export const LevelSelector: React.FC = () => {
     const setScreen = useGameStore(s => s.setScreen);
@@ -28,6 +22,9 @@ export const LevelSelector: React.FC = () => {
 
     const levels = getLevelsForModule(activeModule);
     const moduleProgress = careerProgress.moduleProgress[activeModule];
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [hoveredLevel, setHoveredLevel] = useState<HoveredLevel | null>(null);
 
     // Following rerender-functional-setstate: Use useCallback for stable references
     const handleLevelSelect = useCallback((index: number) => {
@@ -40,8 +37,21 @@ export const LevelSelector: React.FC = () => {
         setScreen('menu');
     }, [setScreen]);
 
+    const handleLevelHover = useCallback((
+        isHovered: boolean,
+        rect: DOMRect | null,
+        level: ModuleLevelConfig,
+        index: number
+    ) => {
+        if (isHovered && rect) {
+            setHoveredLevel({ level, index, rect });
+        } else {
+            setHoveredLevel(null);
+        }
+    }, []);
+
     return (
-        <div className="relative min-h-screen overflow-hidden">
+        <div ref={containerRef} className="relative min-h-screen overflow-hidden">
             {/* Tactical Background */}
             <TacticalBackground />
 
@@ -165,6 +175,9 @@ export const LevelSelector: React.FC = () => {
                                         stars={stars}
                                         isCurrentLevel={isCurrentLevel}
                                         onClick={() => handleLevelSelect(index)}
+                                        onHover={(isHovered, rect) =>
+                                            handleLevelHover(isHovered, rect, level, index)
+                                        }
                                     />
                                 );
                             })}
@@ -187,6 +200,18 @@ export const LevelSelector: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Mission Briefing Tooltip */}
+            {hoveredLevel && (
+                <MissionBriefingTooltip
+                    level={hoveredLevel.level}
+                    levelNumber={hoveredLevel.index + 1}
+                    isUnlocked={hoveredLevel.index <= moduleProgress.unlockedIndex}
+                    stars={moduleProgress.starsPerLevel[hoveredLevel.index] || 0}
+                    targetRect={hoveredLevel.rect}
+                    containerRef={containerRef}
+                />
+            )}
         </div>
     );
 };

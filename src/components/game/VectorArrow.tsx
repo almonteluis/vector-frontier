@@ -9,6 +9,8 @@ interface Props {
     targetVector?: Vec3Type;
     isTarget?: boolean;
     origin?: Vec3Type;
+    color?: string;        // Override color
+    opacity?: number;      // Custom opacity
 }
 
 const SHAFT_RADIUS = 0.06;
@@ -19,7 +21,9 @@ export const VectorArrow: React.FC<Props> = ({
     vectorData,
     targetVector,
     isTarget = false,
-    origin = { x: 0, y: 0, z: 0 }
+    origin = { x: 0, y: 0, z: 0 },
+    color: colorOverride,
+    opacity = 1,
 }) => {
     const meshRef = useRef<THREE.Group>(null);
 
@@ -43,9 +47,10 @@ export const VectorArrow: React.FC<Props> = ({
         return new THREE.Quaternion().setFromUnitVectors(up, direction);
     }, [vec, length]);
 
-    const color = isTarget ? '#00C853' : (vectorData?.color || '#FFD166');
+    const color = colorOverride || (isTarget ? '#00C853' : (vectorData?.color || '#FFD166'));
     const emissive = isSelected ? '#FFE8A3' : '#000000';
     const scale = isSelected ? 1.05 : 1.0;
+    const transparent = opacity < 1;
 
     const handleClick = (e: any) => {
         if (isTarget) return;
@@ -80,12 +85,24 @@ export const VectorArrow: React.FC<Props> = ({
         >
             <mesh position={[0, shaftLength / 2, 0]}>
                 <cylinderGeometry args={[SHAFT_RADIUS, SHAFT_RADIUS, shaftLength, 16]} />
-                <meshStandardMaterial color={color} emissive={emissive} emissiveIntensity={isSelected ? 0.5 : 0} />
+                <meshStandardMaterial
+                    color={color}
+                    emissive={emissive}
+                    emissiveIntensity={isSelected ? 0.5 : 0}
+                    transparent={transparent}
+                    opacity={opacity}
+                />
             </mesh>
 
             <mesh position={[0, shaftLength + (TIP_LENGTH / 2), 0]}>
                 <coneGeometry args={[TIP_RADIUS, TIP_LENGTH, 16]} />
-                <meshStandardMaterial color={color} emissive={emissive} emissiveIntensity={isSelected ? 0.5 : 0} />
+                <meshStandardMaterial
+                    color={color}
+                    emissive={emissive}
+                    emissiveIntensity={isSelected ? 0.5 : 0}
+                    transparent={transparent}
+                    opacity={opacity}
+                />
             </mesh>
 
             {isSelected && (

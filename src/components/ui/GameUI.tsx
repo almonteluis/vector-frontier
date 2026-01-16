@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../../store/gameStore';
-import { RotateCcw, Check, ChevronRight } from 'lucide-react';
+import { RotateCcw, Check, ChevronRight, ArrowLeft } from 'lucide-react';
 import clsx from 'clsx';
-import type { Vector3 } from '../../lib/types';
+import type { Vector3, GameModule } from '../../lib/types';
+
+const MODULE_TITLES: Record<GameModule, string> = {
+    abstract: 'Abstract Puzzles',
+    drone: 'Drone Delivery',
+    bridge: 'Bridge Engineering',
+    robotics: 'Robotics Assembly',
+};
+
+const MODULE_ICONS: Record<GameModule, string> = {
+    abstract: '🎯',
+    drone: '🛸',
+    bridge: '🌉',
+    robotics: '🤖',
+};
 
 export const GameUI: React.FC = () => {
     const currentLevel = useGameStore(s => s.currentLevel);
@@ -13,6 +27,10 @@ export const GameUI: React.FC = () => {
     const submitResult = useGameStore(s => s.submitResult);
     const nextLevel = useGameStore(s => s.nextLevel);
     const resetLevel = useGameStore(s => s.resetLevel);
+    const setScreen = useGameStore(s => s.setScreen);
+    const activeModule = useGameStore(s => s.activeModule);
+    const droneState = useGameStore(s => s.droneState);
+    const currentLevelIndex = useGameStore(s => s.currentLevelIndex);
 
     const [lastResult, setLastResult] = useState<{ success: boolean, errorMag: number, isNearMiss: boolean } | null>(null);
     const [shake, setShake] = useState(false);
@@ -49,12 +67,51 @@ export const GameUI: React.FC = () => {
       `}</style>
 
             {/* Top Left: Level Info */}
-            <div className="absolute top-4 left-4 p-4 bg-slate-900/80 backdrop-blur-sm rounded-lg text-white max-w-md pointer-events-none select-none border border-white/10 shadow-xl">
-                <h1 className="text-xl font-bold text-primary mb-1">Vector Voyage</h1>
+            <div className="absolute top-4 left-4 p-4 bg-slate-900/80 backdrop-blur-sm rounded-lg text-white max-w-md border border-white/10 shadow-xl">
+                {/* Back Button */}
+                <button
+                    onClick={() => setScreen('levelSelect')}
+                    className="flex items-center gap-1 text-sm text-slate-400 hover:text-white mb-2 transition-colors"
+                >
+                    <ArrowLeft size={14} />
+                    Back to Levels
+                </button>
+
+                {/* Module Title */}
+                <div className="flex items-center gap-2 mb-1">
+                    <span className="text-lg">{MODULE_ICONS[activeModule]}</span>
+                    <h1 className="text-lg font-bold text-primary">{MODULE_TITLES[activeModule]}</h1>
+                </div>
+
+                {/* Level Info */}
                 <div className="flex items-baseline gap-2">
-                    <h2 className="text-lg text-vector">{currentLevel.id}. {currentLevel.title}</h2>
+                    <h2 className="text-md text-vector">Level {currentLevelIndex + 1}: {currentLevel.title}</h2>
                 </div>
                 <p className="text-sm text-gray-300 mt-2">{currentLevel.description}</p>
+
+                {/* Module-specific info */}
+                {activeModule === 'drone' && droneState && (
+                    <div className="mt-3 pt-3 border-t border-slate-700 space-y-2">
+                        <div className="flex justify-between text-xs">
+                            <span className="text-slate-400">Battery</span>
+                            <span className={droneState.batteryRemaining < 30 ? 'text-red-400' : 'text-green-400'}>
+                                {droneState.batteryRemaining.toFixed(0)}%
+                            </span>
+                        </div>
+                        <div className="w-full bg-slate-700 rounded-full h-1.5">
+                            <div
+                                className={`h-1.5 rounded-full transition-all ${droneState.batteryRemaining < 30 ? 'bg-red-500' : 'bg-green-500'}`}
+                                style={{ width: `${droneState.batteryRemaining}%` }}
+                            />
+                        </div>
+                        <div className="flex justify-between text-xs">
+                            <span className="text-slate-400">Wind</span>
+                            <span className="text-blue-400">
+                                ({droneState.currentWind.x.toFixed(1)}, {droneState.currentWind.y.toFixed(1)}, {droneState.currentWind.z.toFixed(1)})
+                            </span>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Right Sidebar */}

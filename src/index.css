@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  body,
+  #root {
+    @apply h-screen w-screen overflow-hidden m-0;
+    background: linear-gradient(to bottom, #0F172A, #071033);
+    color: #F8FAFC;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}

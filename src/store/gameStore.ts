@@ -124,7 +124,7 @@ export const useGameStore = create<GameStore>()(
     persist(
         (set, get) => ({
             // === Navigation State ===
-            currentScreen: 'menu',
+            currentScreen: 'landing',
             activeModule: 'abstract',
 
             // === Module Unlocks ===

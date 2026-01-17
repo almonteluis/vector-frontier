@@ -15,7 +15,7 @@ export interface VectorData {
 
 export type GameModule = 'abstract' | 'drone' | 'bridge' | 'robotics';
 
-export type ScreenType = 'menu' | 'game' | 'levelSelect' | 'career';
+export type ScreenType = 'landing' | 'menu' | 'game' | 'levelSelect' | 'career';
 
 // ============================================
 // Level Configuration Types

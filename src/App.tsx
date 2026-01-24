@@ -4,26 +4,19 @@ import { GameUI } from './components/ui/GameUI';
 import { MainMenu } from './components/ui/MainMenu';
 import { LevelSelector } from './components/ui/LevelSelector';
 import { CareerDashboard } from './components/ui/CareerDashboard';
-import { LandingPage } from './components/ui/LandingPage';
 
 function App() {
   const currentScreen = useGameStore(s => s.currentScreen);
 
   return (
     <div
-      className={`relative w-full flex flex-col text-textPrimary ${currentScreen === 'landing'
-          ? 'min-h-screen overflow-y-auto bg-[#F0F2F5]'
-          : 'h-screen overflow-hidden bg-backgroundTop'
-        }`}
+      className="relative w-full h-screen overflow-hidden bg-backgroundTop flex flex-col text-textPrimary"
       style={{
         width: '100vw',
-        height: currentScreen === 'landing' ? 'auto' : '100vh',
-        backgroundColor: currentScreen === 'landing' ? '#F0F2F5' : '#0F172A'
+        height: '100vh',
+        backgroundColor: '#0F172A'
       }}
     >
-      {/* Landing Page */}
-      {currentScreen === 'landing' && <LandingPage />}
-
       {/* Main Menu */}
       {currentScreen === 'menu' && <MainMenu />}
 

@@ -33,8 +33,6 @@ npm run preview  # Preview production build locally
 
 ### Application Screens
 ```
-Landing Page (marketing)
-    ↓
 Main Menu (4 module cards with progress)
     ├→ Level Selector (hexagonal grid + Mission Control panel)
     │   └→ Game Screen (3D scene + HUD)
@@ -58,7 +56,6 @@ src/
 │   │   ├── BaseScene.tsx     # Shared Three.js setup
 │   │   └── VectorArrow.tsx   # 3D arrow visualization
 │   ├── ui/                   # User interface components
-│   │   ├── LandingPage.tsx   # Marketing/intro page
 │   │   ├── MainMenu.tsx      # Module selection
 │   │   ├── LevelSelector.tsx # Hexagonal level grid
 │   │   ├── CareerDashboard.tsx # Badges and progress
@@ -91,7 +88,7 @@ src/
 **Zustand store with localStorage persistence** manages all application state:
 
 ### Navigation State
-- `currentScreen`: ScreenType - Current screen ('landing' | 'menu' | 'game' | 'levelSelect' | 'career')
+- `currentScreen`: ScreenType - Current screen ('menu' | 'game' | 'levelSelect' | 'career')
 - `activeModule`: GameModule - Current module ('abstract' | 'drone' | 'bridge' | 'robotics')
 - `setScreen()`, `setActiveModule()` - Navigation actions
 
@@ -240,7 +237,6 @@ src/
 ### UI Components
 
 **Navigation**
-- **LandingPage** (src/components/ui/LandingPage.tsx:1) - Marketing page with clay morphism design
 - **MainMenu** (src/components/ui/MainMenu.tsx:1) - 4 module cards with progress/lock indicators
 - **LevelSelector** (src/components/ui/LevelSelector.tsx:1) - Hexagonal level grid + Mission Control panel
 - **CareerDashboard** (src/components/ui/CareerDashboard.tsx:1) - Badges, progress gauges, filtering
@@ -425,7 +421,7 @@ interface VectorData {
 }
 
 type GameModule = 'abstract' | 'drone' | 'bridge' | 'robotics'
-type ScreenType = 'landing' | 'menu' | 'game' | 'levelSelect' | 'career'
+type ScreenType = 'menu' | 'game' | 'levelSelect' | 'career'
 type BadgeTier = 'bronze' | 'silver' | 'gold'
 ```
 
